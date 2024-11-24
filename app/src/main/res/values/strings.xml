@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Homework2</string>
+    <string name="updateGifsTrending">Get trending GIFs</string>
+    <string name="refresh">An error has occurred, please refresh your application</string>
+</resources>

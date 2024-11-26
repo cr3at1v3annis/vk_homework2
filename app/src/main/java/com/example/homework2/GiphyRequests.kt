@@ -1,4 +1,7 @@
 package com.example.homework2
+import android.os.Parcel
+import android.os.Parcelable
+import androidx.versionedparcelable.ParcelField
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -12,7 +15,7 @@ data class Images(
 )
 
 @Serializable
-data class GifData(
+data class GifData (
     @SerialName("title") val title: String,
     @SerialName("images") val images: Images
 )

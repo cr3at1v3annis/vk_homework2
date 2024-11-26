@@ -1,6 +1,8 @@
 package com.example.homework2
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
 
 import android.os.Bundle
@@ -31,6 +33,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.coroutines.*
+import kotlinx.serialization.Serializable
 
 
 class MainActivity : ComponentActivity() {
@@ -50,6 +53,7 @@ class MainActivity : ComponentActivity() {
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         val coroutineScope = rememberCoroutineScope()
+        var state by rememberSaveable { mutableStateOf(false) }
         val handler = CoroutineExceptionHandler { _, exception ->
             run {
                 isLoading = false
@@ -149,6 +153,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("UnsafeIntentLaunch")
     @Composable
     fun OneGifItem(gifData: GifData, modifier: Modifier = Modifier) {
         Column(
@@ -156,18 +161,28 @@ class MainActivity : ComponentActivity() {
                 .fillMaxWidth()
                 .padding(8.dp)
         ) {
-            AndroidView(factory = { context ->
-                ImageView(context).apply {
-                    scaleType = ImageView.ScaleType.FIT_CENTER
-                }
-            }, modifier = Modifier.fillMaxSize(),
+            AndroidView(
+                factory = { context ->
+                    ImageView(context).apply {
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable(onClick = {
+                        //intent.putExtra("url", gifData.images.original.url)
+                        intent = Intent(this@MainActivity, DisplayOnTap::class.java).apply {
+                            putExtra("gifdata", gifData.images.original.url)
+                        }
+                        startActivity(intent)
+                    }),
                 update = { imageView ->
                     Glide.with(imageView.context).load(gifData.images.original.url)
                         .diskCacheStrategy(
                             DiskCacheStrategy.ALL
                         )
                         .into(imageView)
-                }
+                },
             )
             Text(
                 text = gifData.title,

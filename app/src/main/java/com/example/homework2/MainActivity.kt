@@ -53,7 +53,6 @@ class MainActivity : ComponentActivity() {
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         val coroutineScope = rememberCoroutineScope()
-        var state by rememberSaveable { mutableStateOf(false) }
         val handler = CoroutineExceptionHandler { _, exception ->
             run {
                 isLoading = false
@@ -153,7 +152,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @SuppressLint("UnsafeIntentLaunch")
     @Composable
     fun OneGifItem(gifData: GifData, modifier: Modifier = Modifier) {
         Column(
@@ -172,9 +170,10 @@ class MainActivity : ComponentActivity() {
                     .clickable(onClick = {
                         //intent.putExtra("url", gifData.images.original.url)
                         intent = Intent(this@MainActivity, DisplayOnTap::class.java).apply {
-                            putExtra("gifdata", gifData.images.original.url)
+                            putExtra(Intent.EXTRA_LOCAL_ONLY, gifData.images.original.url)
                         }
                         startActivity(intent)
+                        finish()
                     }),
                 update = { imageView ->
                     Glide.with(imageView.context).load(gifData.images.original.url)

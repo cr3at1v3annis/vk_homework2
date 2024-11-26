@@ -41,7 +41,7 @@ class DisplayOnTap : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gifDataUrl = intent.getStringExtra("gitdata") as? String
+        val gifDataUrl = intent.getStringExtra(Intent.EXTRA_LOCAL_ONLY) as? String
         setContent {
             Display(gifDataUrl)
         }
